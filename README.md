@@ -12,7 +12,7 @@ Split a tall image into 4 images with preview, pan/zoom, and gap controls.
 5. `フレームを表示`のチェックを外すと見た目上のフレームが消えて原画が見られます（出力画像に影響は無し）
 6. `Gap を有効`のチェックを外すと隙間のない4分割画像になります。
 
-詳しくは [ヘルプ](help.html) をご覧ください。
+詳しくは [ヘルプ](https://ooovips.github.io/Split4X/help.html) をご覧ください。
 
 # Usage
 
@@ -23,11 +23,12 @@ Split a tall image into 4 images with preview, pan/zoom, and gap controls.
 5. Uncheck `レームを表示` to remove the visual frames and view the original image (output images remain unaffected).
 6. Uncheck `Gap を有効` to create a seamless four-panel image.
 
-For more details, see [Help](help.html).
+For more details, see [Help](https://ooovips.github.io/Split4X/help.html).
 
 ## License
 
 MIT
+
 
 
 
