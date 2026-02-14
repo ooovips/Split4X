@@ -1,6 +1,6 @@
 ﻿# Split4X
 
-縦長の画像を4分割し、プレビュー、パン/ズーム、間隔調整機能付きで表示します。
+縦長の画像を4分割し、プレビュー、パン/ズーム、間隔調整機能付きで表示します。  
 Split a tall image into 4 images with preview, pan/zoom, and gap controls.
 
 ## 使い方
@@ -24,6 +24,7 @@ Split a tall image into 4 images with preview, pan/zoom, and gap controls.
 ## License
 
 MIT
+
 
 
 
