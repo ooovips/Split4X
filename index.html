@@ -1,415 +1,494 @@
 <!doctype html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+
   <meta name="description" content="Split4Xは、縦長画像を4分割してプレビュー・ダウンロードできるクライアントサイドツールです。" />
+
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Split4X - 縦画像4分割ツール" />
   <meta property="og:description" content="縦長画像を4分割して、そのままプレビュー・ダウンロードできるWebツール。" />
-  <meta property="og:url" content="https://github.com/ooovips/Split4X" />
-  <meta property="og:image" content="./ogp.png" />
+  <meta property="og:url" content="https://ooovips.github.io/Split4X/" />
+  <meta property="og:image" content="https://ooovips.github.io/Split4X/ogp.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Split4X - 縦画像4分割ツール" />
   <meta name="twitter:description" content="縦長画像を4分割して、そのままプレビュー・ダウンロードできるWebツール。" />
-  <meta name="twitter:image" content="./ogp.png" />
+  <meta name="twitter:image" content="https://ooovips.github.io/Split4X/ogp.png" />
+  <meta name="twitter:image:alt" content="Split4XのOGP画像" />
+
   <title>Split4X - 縦画像4分割ツール</title>
   <style>
-    :root{
-      --bg1:#f7fbff;
-      --bg2:#fff3fb;
-      --card:#ffffffcc;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --shadow: 0 12px 30px rgba(31,41,55,.10);
+    :root {
+      --bg1: #f7fbff;
+      --bg2: #fff3fb;
+      --card: #ffffffcc;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --shadow: 0 12px 30px rgba(31, 41, 55, .10);
       --radius: 18px;
-      --line: rgba(31,41,55,.10);
-      --accent1: rgba(236,72,153,.20);
-      --accent2: rgba(124,58,237,.20);
-      --accentBorder: rgba(124,58,237,.30);
+      --line: rgba(31, 41, 55, .10);
+      --accent1: rgba(236, 72, 153, .20);
+      --accent2: rgba(124, 58, 237, .20);
+      --accentBorder: rgba(124, 58, 237, .30);
     }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Yu Gothic", "Meiryo", sans-serif;
-      color:var(--text);
+      color: var(--text);
       background:
         radial-gradient(1200px 600px at 20% 10%, var(--bg2), transparent 60%),
         radial-gradient(1200px 600px at 80% 0%, var(--bg1), transparent 60%),
         linear-gradient(180deg, #ffffff, #f7f7ff);
-      min-height:100vh;
-      padding:22px;
+      min-height: 100vh;
+      padding: 22px;
     }
 
-    .app{
+    .app {
       max-width: 1200px;
       margin: 0 auto;
-      display:grid;
+      display: grid;
       grid-template-columns: 1fr 360px;
-      gap:18px;
-      align-items:start;
-      user-select:none;
-      -webkit-user-select:none;
-    }
-    @media (max-width: 980px){
-      .app{ grid-template-columns: 1fr; }
+      gap: 18px;
+      align-items: start;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    .panel{
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
       background: var(--card);
-      border: 3px solid rgba(43,108,176,.25);
+      border: 3px solid rgba(43, 108, 176, .25);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow:hidden;
+      overflow: hidden;
       backdrop-filter: blur(10px);
     }
 
-    .header{
+    .header {
       padding: 14px 16px 10px;
-      background: linear-gradient(90deg, rgba(43,108,176,.16), rgba(236,72,153,.16));
-      border-bottom: 1px solid rgba(31,41,55,.08);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .title{ font-weight:900; letter-spacing:.2px; }
-    .helpBtn{
-      width:34px;
-      height:34px;
-      border-radius:999px;
-      border:2px solid var(--accentBorder);
-      background:#fff;
-      color:#374151;
-      font-weight:900;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      line-height:1;
-      user-select:none;
+      background: linear-gradient(90deg, rgba(43, 108, 176, .16), rgba(236, 72, 153, .16));
+      border-bottom: 1px solid rgba(31, 41, 55, .08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
-    .toolbar{
+    .title {
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+
+    .helpBtn {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 2px solid var(--accentBorder);
+      background: #fff;
+      color: #374151;
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .toolbar {
       padding: 12px 14px 14px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
     }
 
-    .field{
-      display:flex;
-      align-items:center;
-      gap:8px;
+    .field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 10px;
-      background:#fff;
+      background: #fff;
       border: 2px solid var(--line);
       border-radius: 14px;
     }
-    .field label{
+
+    .field label {
       font-size: 13px;
       color: var(--muted);
-      white-space:nowrap;
-    }
-    input[type="number"]{
-      width:72px;
-      border:none;
-      outline:none;
-      font-size:14px;
-      padding:6px 6px;
-      background:transparent;
-      color:var(--text);
-    }
-    .unit{
-      font-size: 13px;
-      color: var(--muted);
-      white-space:nowrap;
-      font-weight:700;
+      white-space: nowrap;
     }
 
-    .btn{
+    input[type="number"] {
+      width: 72px;
       border: none;
-      cursor:pointer;
+      outline: none;
+      font-size: 14px;
+      padding: 6px 6px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .unit {
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
       border-radius: 14px;
       padding: 10px 14px;
       background: linear-gradient(90deg, var(--accent1), var(--accent2));
       color: #111827;
-      font-weight:900;
-      box-shadow: 0 10px 22px rgba(236,72,153,.10);
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(236, 72, 153, .10);
       transition: transform .06s ease, filter .2s ease, opacity .2s ease;
-      user-select:none;
-      white-space:nowrap;
+      user-select: none;
+      white-space: nowrap;
     }
-    .btn:hover{ filter: brightness(1.02); }
-    .btn:active{ transform: translateY(1px); }
-    .btn.secondary{
+
+    .btn:hover {
+      filter: brightness(1.02);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn.secondary {
       background: #fff;
       border: 2px solid var(--accentBorder);
-      box-shadow:none;
-    }
-    .btn:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-      box-shadow:none;
+      box-shadow: none;
     }
 
-    .zoomCtl{
-      display:flex;
-      align-items:center;
-      gap:8px;
+    .btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .zoomCtl {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 10px;
-      background:#fff;
+      background: #fff;
       border: 2px solid var(--line);
       border-radius: 14px;
     }
-    .zoomCtl .mini{
-      width:34px;height:34px;
+
+    .zoomCtl .mini {
+      width: 34px;
+      height: 34px;
       border-radius: 12px;
       border: 2px solid var(--line);
-      background:#fff;
-      cursor:pointer;
-      font-weight:900;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 900;
     }
-    .zoomCtl .mini:active{ transform: translateY(1px); }
-    .zoomCtl .val{ min-width: 64px; text-align:center; font-weight:900; }
 
-    .checkCtl{
-      display:flex;
-      align-items:center;
-      gap:8px;
+    .zoomCtl .mini:active {
+      transform: translateY(1px);
+    }
+
+    .zoomCtl .val {
+      min-width: 64px;
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .checkCtl {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 10px;
-      background:#fff;
+      background: #fff;
       border: 2px solid var(--line);
       border-radius: 14px;
-      font-size:13px;
+      font-size: 13px;
       color: var(--muted);
-      font-weight:700;
-      user-select:none;
-    }
-    .checkCtl input{
-      width:16px;
-      height:16px;
-      accent-color:#2b6cb0;
+      font-weight: 700;
+      user-select: none;
     }
 
-    .work{ padding: 14px; }
+    .checkCtl input {
+      width: 16px;
+      height: 16px;
+      accent-color: #2b6cb0;
+    }
 
-    .drop{
+    .work {
+      padding: 14px;
+    }
+
+    .drop {
       border-radius: var(--radius);
-      border: 3px dashed rgba(43,108,176,.30);
-      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.65));
+      border: 3px dashed rgba(43, 108, 176, .30);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .85), rgba(255, 255, 255, .65));
       padding: 16px;
-    }
-    .drop.dragover{
-      border-color: rgba(236,72,153,.55);
-      background: linear-gradient(180deg, rgba(255,243,251,.9), rgba(247,251,255,.85));
     }
 
-    .placeholder{
+    .drop.dragover {
+      border-color: rgba(236, 72, 153, .55);
+      background: linear-gradient(180deg, rgba(255, 243, 251, .9), rgba(247, 251, 255, .85));
+    }
+
+    .placeholder {
       min-height: 520px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       padding: 16px;
       color: var(--muted);
-      font-weight:700;
-      line-height:1.7;
+      font-weight: 700;
+      line-height: 1.7;
     }
-    .placeholder .big{
+
+    .placeholder .big {
       color: var(--text);
       font-size: 18px;
-      font-weight:900;
+      font-weight: 900;
     }
-    .placeholder .important{
-      color:#b91c1c;
-      font-size:22px;
-      font-weight:900;
-      line-height:1.5;
+
+    .placeholder .important {
+      color: #b91c1c;
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.5;
       max-width: 680px;
       margin: 32px auto 0;
-      text-shadow: 0 1px 0 rgba(255,255,255,.9);
-      text-align:left;
-      display:inline-block;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, .9);
+      text-align: left;
+      display: inline-block;
     }
-    .placeholder .helpLink{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+
+    .placeholder .helpLink {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       margin-top: 6px;
       padding: 10px 14px;
       border-radius: 999px;
-      border: 2px solid rgba(29,78,216,.28);
+      border: 2px solid rgba(29, 78, 216, .28);
       background: #fff;
-      box-shadow: 0 8px 18px rgba(29,78,216,.12);
-      font-weight:900;
-      color:#1e3a8a;
-      text-decoration:none;
-    }
-    .placeholder .helpLink::before{
-      content:"？";
-      width:22px;
-      height:22px;
-      border-radius:999px;
-      border:2px solid rgba(29,78,216,.40);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:12px;
-      line-height:1;
-      color:#1d4ed8;
-      background:rgba(219,234,254,.65);
+      box-shadow: 0 8px 18px rgba(29, 78, 216, .12);
+      font-weight: 900;
+      color: #1e3a8a;
+      text-decoration: none;
     }
 
-    .previewArea{ display:none; position:relative; }
-
-    .plainViewport{
-      display:none;
-      position:relative;
-      width:100%;
-      overflow:hidden;
-      border:none;
-      background:transparent;
-      border-radius:18px;
-      box-shadow: 0 0 0 1px rgba(31,41,55,.06);
+    .placeholder .helpLink::before {
+      content: "？";
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 2px solid rgba(29, 78, 216, .40);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 1;
+      color: #1d4ed8;
+      background: rgba(219, 234, 254, .65);
     }
 
-    .gridWrap{
+    .previewArea {
+      display: none;
+      position: relative;
+    }
+
+    .plainViewport {
+      display: none;
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border: none;
+      background: transparent;
+      border-radius: 18px;
+      box-shadow: 0 0 0 1px rgba(31, 41, 55, .06);
+    }
+
+    .gridWrap {
       max-width: 1920px;
       margin: 0 auto;
     }
 
-    .grid{
-      display:flex;
-      flex-direction:column;
-      gap: 14px; /* JSでGapに同期 */
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      /* JSでGapに同期 */
     }
 
     /* フレーム自体の線は消す。画像との“空隙”も0にするため、paddingも0 */
-    .frame{
-      position:relative;
-      padding: 0;          /* 空隙ゼロ */
-      border: none;        /* 線なし */
+    .frame {
+      position: relative;
+      padding: 0;
+      /* 空隙ゼロ */
+      border: none;
+      /* 線なし */
       background: transparent;
-      border-radius: 18px; /* 角は丸く */
-      overflow: visible;   /* 角丸はviewport側で管理 */
+      border-radius: 18px;
+      /* 角は丸く */
+      overflow: visible;
+      /* 角丸はviewport側で管理 */
     }
 
-    .label{
-      position:absolute;
+    .label {
+      position: absolute;
       left: 12px;
       top: 10px;
-      background: rgba(255,255,255,.88);
-      border: 1px solid rgba(31,41,55,.10);
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid rgba(31, 41, 55, .10);
       padding: 5px 10px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight:900;
-      color: rgba(31,41,55,.75);
+      font-weight: 900;
+      color: rgba(31, 41, 55, .75);
       z-index: 3;
-      pointer-events:none;
+      pointer-events: none;
     }
 
     /* 画像の窓：ここが“画像と一体”の見た目になるように余白・線をゼロに */
-    .viewport{
-      position:relative;
+    .viewport {
+      position: relative;
       width: 100%;
-      height: 260px;     /* JSで更新 */
-      overflow:hidden;
-      border: none;      /* 線なし */
+      height: 260px;
+      /* JSで更新 */
+      overflow: hidden;
+      border: none;
+      /* 線なし */
       background: transparent;
       border-radius: 18px;
-      box-shadow: 0 0 0 1px rgba(31,41,55,.06); /* ほぼ見えない程度の薄い縁取り（不要なら0に） */
+      box-shadow: 0 0 0 1px rgba(31, 41, 55, .06);
+      /* ほぼ見えない程度の薄い縁取り（不要なら0に） */
     }
 
-    .imgLayer{
-      position:absolute;
-      left:0;
-      top:0;
+    .imgLayer {
+      position: absolute;
+      left: 0;
+      top: 0;
       transform-origin: 0 0;
       will-change: transform;
-      user-select:none;
-      -webkit-user-drag:none;
-      pointer-events:none;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
     }
 
-    .side{ padding: 14px; }
-    .side h3{
+    .side {
+      padding: 14px;
+    }
+
+    .side h3 {
       margin: 6px 2px 10px;
       font-size: 14px;
-      color: rgba(31,41,55,.8);
+      color: rgba(31, 41, 55, .8);
     }
 
-    .sideCard{
-      background:#fff;
-      border: 2px solid rgba(43,108,176,.16);
+    .sideCard {
+      background: #fff;
+      border: 2px solid rgba(43, 108, 176, .16);
       border-radius: 16px;
       padding: 12px;
     }
 
-    .note{
+    .note {
       margin-top: 10px;
       color: var(--muted);
       font-size: 12.5px;
-      line-height:1.55;
+      line-height: 1.55;
     }
 
-    .rowBtns{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+    .rowBtns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-top: 6px;
     }
 
-    .thumbList{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
+    .thumbList {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       margin-top: 12px;
     }
-    .thumbRow{
-      display:grid;
+
+    .thumbRow {
+      display: grid;
       grid-template-columns: 168px 1fr 44px;
-      gap:10px;
-      align-items:center;
+      gap: 10px;
+      align-items: center;
       padding: 0;
       border-radius: 0;
       border: none;
       background: transparent;
     }
-    .thumb{
-      width:168px;
-      height:96px;
+
+    .thumb {
+      width: 168px;
+      height: 96px;
       border-radius: 0;
       border: none;
       object-fit: contain;
       object-position: center;
-      background:transparent;
+      background: transparent;
     }
-    .thumbTitle{
-      font-weight:900;
+
+    .thumbTitle {
+      font-weight: 900;
       font-size: 13px;
     }
-    .thumbMeta{
+
+    .thumbMeta {
       font-size: 12px;
       color: var(--muted);
       margin-top: 2px;
     }
-    .dlIcon{
-      width:44px;height:44px;
-      border-radius: 14px;
-      border: 2px solid rgba(31,41,55,.10);
-      background: linear-gradient(135deg, rgba(43,108,176,.18), rgba(236,72,153,.18));
-      cursor:pointer;
-      font-weight:900;
-    }
-    .dlIcon:disabled{ opacity:.45; cursor:not-allowed; }
 
-    .sr-only{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+    .dlIcon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 2px solid rgba(31, 41, 55, .10);
+      background: linear-gradient(135deg, rgba(43, 108, 176, .18), rgba(236, 72, 153, .18));
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .dlIcon:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .sr-only {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="app">
@@ -457,10 +536,11 @@
           <div id="placeholder" class="placeholder">
             <div>
               <div class="big">ここをクリックしてファイルを選択</div>
-              or<br/>ファイルをドラッグ
-              <br/><br/><br/>
-              <div class="important">4分割画像を投稿するためには以下の条件が必要です。<br/><br/>・X Premium に加入<br/>・PC (Windows / macOS) のウェブブラウザから投稿<br/>・テキストが必須<br/><br/>※ iPhone や Android 端末からは投稿できません。</div>
-              <br/><br/><br/>
+              or<br />ファイルをドラッグ
+              <br /><br /><br />
+              <div class="important">4分割画像を投稿するためには以下の条件が必要です。<br /><br />・X Premium に加入<br />・PC (Windows / macOS)
+                のウェブブラウザから投稿<br />・テキストが必須<br /><br />※ iPhone や Android 端末からは投稿できません。</div>
+              <br /><br /><br />
               <a class="helpLink" href="./help.html">詳しい使い方はこちら</a>
             </div>
           </div>
@@ -496,557 +576,558 @@
 
   <div style="text-align:center; margin:16px 0 8px; font-size:12px; color:#6b7280;">
     GitHub:
-    <a href="https://github.com/ooovips/Split4X" target="_blank" rel="noopener noreferrer">https://github.com/ooovips/Split4X</a>
+    <a href="https://github.com/ooovips/Split4X" target="_blank"
+      rel="noopener noreferrer">https://github.com/ooovips/Split4X</a>
   </div>
 
-<script>
-(() => {
-  const $ = (id) => document.getElementById(id);
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
 
-  const fileInput = $('file');
-  const btnClear = $('btnClear');
-  const drop = $('drop');
+      const fileInput = $('file');
+      const btnClear = $('btnClear');
+      const drop = $('drop');
 
-  const outW = $('outW');
-  const gapEnabled = $('gapEnabled');
-  const gapInput = $('gap');
+      const outW = $('outW');
+      const gapEnabled = $('gapEnabled');
+      const gapInput = $('gap');
 
-  const zoomMinus = $('zoomMinus');
-  const zoomPlus = $('zoomPlus');
-  const zoomVal = $('zoomVal');
-  const btnReset = $('btnReset');
-  const frameToggle = $('frameToggle');
+      const zoomMinus = $('zoomMinus');
+      const zoomPlus = $('zoomPlus');
+      const zoomVal = $('zoomVal');
+      const btnReset = $('btnReset');
+      const frameToggle = $('frameToggle');
 
-  const btnAll2 = $('btnAll2');
+      const btnAll2 = $('btnAll2');
 
-  const placeholder = $('placeholder');
-  const previewArea = $('previewArea');
-  const plainViewport = $('plainViewport');
-  const plainImg = $('plainImg');
-  const grid = $('grid');
-  const gridWrap = grid.parentElement;
-  const thumbList = $('thumbList');
+      const placeholder = $('placeholder');
+      const previewArea = $('previewArea');
+      const plainViewport = $('plainViewport');
+      const plainImg = $('plainImg');
+      const grid = $('grid');
+      const gridWrap = grid.parentElement;
+      const thumbList = $('thumbList');
 
-  const DEFAULT_ZOOM = 100;
+      const DEFAULT_ZOOM = 100;
 
-  let imgObjUrl = null;
-  let imgBitmap = null;
-  let imgNatural = { w: 0, h: 0 };
-  let srcBaseName = 'image';
+      let imgObjUrl = null;
+      let imgBitmap = null;
+      let imgNatural = { w: 0, h: 0 };
+      let srcBaseName = 'image';
 
-  let disp = { w: 0, h: 0, sliceH: 0, gap: 0 };
+      let disp = { w: 0, h: 0, sliceH: 0, gap: 0 };
 
-  let zoom = DEFAULT_ZOOM;
-  let showFrames = true;
-  let pan = { x: 0, y: 0 };
-  let isPanning = false;
-  let panStart = { x: 0, y: 0, px: 0, py: 0 };
-  let splitTimer = 0;
-  let splitReqId = 0;
+      let zoom = DEFAULT_ZOOM;
+      let showFrames = true;
+      let pan = { x: 0, y: 0 };
+      let isPanning = false;
+      let panStart = { x: 0, y: 0, px: 0, py: 0 };
+      let splitTimer = 0;
+      let splitReqId = 0;
 
-  const frames = [];
-  const exports = [null, null, null, null];
+      const frames = [];
+      const exports = [null, null, null, null];
 
-  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+      function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 
-  function setEnabled(hasImage){
-    outW.disabled = !hasImage;
-    gapEnabled.disabled = !hasImage;
-    gapInput.disabled = !hasImage || !gapEnabled.checked;
-    btnClear.disabled = !hasImage;
-  }
-
-  function setAllEnabled(enabled){
-    btnAll2.disabled = !enabled;
-  }
-
-  function setZoom(v){
-    zoom = clamp(v, 50, 300);
-    zoomVal.textContent = String(zoom);
-    clampPan();
-    applyTransform();
-    scheduleAutoSplit();
-  }
-
-  function reset(){
-    outW.value = '1920';
-    pan.x = 0;
-    pan.y = 0;
-    setZoom(DEFAULT_ZOOM);
-    clampPan();
-    applyTransform();
-    scheduleAutoSplit();
-  }
-
-  btnReset.addEventListener('click', reset);
-
-  zoomMinus.addEventListener('click', () => setZoom(zoom - 10));
-  zoomPlus.addEventListener('click', () => setZoom(zoom + 10));
-
-  drop.addEventListener('click', (e) => {
-    const t = e.target;
-    if (t && t.closest && t.closest('a,button,input,label')) return;
-    if (!imgBitmap) fileInput.click();
-  });
-
-  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('dragover'); });
-  drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
-  drop.addEventListener('drop', async (e) => {
-    e.preventDefault();
-    drop.classList.remove('dragover');
-    if (imgBitmap) return;
-    const f = e.dataTransfer.files && e.dataTransfer.files[0];
-    if (f) await loadFile(f);
-  });
-
-  fileInput.addEventListener('change', async () => {
-    const f = fileInput.files && fileInput.files[0];
-    fileInput.value = '';
-    if (f) await loadFile(f);
-  });
-
-  async function loadFile(file){
-    if (!file.type.startsWith('image/')) return;
-
-    if (splitTimer) clearTimeout(splitTimer);
-    splitReqId++;
-
-    if (imgObjUrl) URL.revokeObjectURL(imgObjUrl);
-    if (imgBitmap && imgBitmap.close) imgBitmap.close();
-    clearExports();
-
-    imgObjUrl = URL.createObjectURL(file);
-
-    const img = new Image();
-    img.decoding = 'async';
-    img.src = imgObjUrl;
-    await img.decode();
-
-    imgNatural.w = img.naturalWidth;
-    imgNatural.h = img.naturalHeight;
-    srcBaseName = sanitizeBaseName((file.name || 'image').replace(/\.[^.]+$/, ''));
-    imgBitmap = await createImageBitmap(img);
-
-    buildFrames();
-    plainImg.src = imgObjUrl;
-
-    placeholder.style.display = 'none';
-    previewArea.style.display = 'block';
-    setEnabled(true);
-
-    pan.x = 0; pan.y = 0;
-    setZoom(DEFAULT_ZOOM);
-    layoutDisplay();
-    updateLeftMode();
-    clampPan();
-    applyTransform();
-  }
-
-  function clearImage(){
-    if (splitTimer) clearTimeout(splitTimer);
-    splitReqId++;
-    clearExports();
-
-    if (imgBitmap && imgBitmap.close) imgBitmap.close();
-    imgBitmap = null;
-    imgNatural.w = 0;
-    imgNatural.h = 0;
-
-    if (imgObjUrl) URL.revokeObjectURL(imgObjUrl);
-    imgObjUrl = null;
-    plainImg.src = '';
-
-    grid.innerHTML = '';
-    frames.length = 0;
-
-    pan.x = 0;
-    pan.y = 0;
-    setZoom(DEFAULT_ZOOM);
-    showFrames = true;
-    frameToggle.checked = true;
-    updateLeftMode();
-
-    fileInput.value = '';
-    placeholder.style.display = 'flex';
-    previewArea.style.display = 'none';
-    setEnabled(false);
-    setAllEnabled(false);
-  }
-
-  btnClear.addEventListener('click', clearImage);
-
-  function clearExports(){
-    for (let i=0;i<4;i++){
-      if (exports[i]?.url) URL.revokeObjectURL(exports[i].url);
-      exports[i] = null;
-    }
-    thumbList.innerHTML = '';
-    setAllEnabled(false);
-  }
-
-  function buildFrames(){
-    grid.innerHTML = '';
-    frames.length = 0;
-
-    for (let i=0; i<4; i++){
-      const frameEl = document.createElement('div');
-      frameEl.className = 'frame';
-
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = `${i+1}枚目`;
-      frameEl.appendChild(label);
-
-      const viewportEl = document.createElement('div');
-      viewportEl.className = 'viewport';
-
-      const imgEl = document.createElement('img');
-      imgEl.className = 'imgLayer';
-      imgEl.alt = '';
-      imgEl.src = imgObjUrl;
-
-      viewportEl.appendChild(imgEl);
-      frameEl.appendChild(viewportEl);
-      grid.appendChild(frameEl);
-
-      frames.push({ frameEl, viewportEl, imgEl, idx: i, baseTop: 0 });
-    }
-  }
-
-  function layoutDisplay(){
-    if (!imgBitmap) return;
-
-    const wrap = gridWrap;
-    const availW = (wrap?.clientWidth || 1);
-    const dispW = Math.min(1920, availW);
-    const dispH = Math.max(1, Math.round(dispW * (imgNatural.h / imgNatural.w)));
-
-    const gapPx = gapEnabled.checked ? clamp(parseInt(gapInput.value || '0', 10), 0, 400) : 0;
-    const usableH = Math.max(1, dispH - gapPx * 3);
-    const sliceH = Math.max(1, Math.floor(usableH / 4));
-
-    disp.w = dispW;
-    disp.h = dispH;
-    disp.sliceH = sliceH;
-    disp.gap = gapPx;
-
-    grid.style.gap = gapPx + 'px';
-
-    for (const f of frames){
-      f.viewportEl.style.height = sliceH + 'px';
-      f.imgEl.style.width = dispW + 'px';
-      f.imgEl.style.height = dispH + 'px';
-
-      f.baseTop = -f.idx * (sliceH + gapPx);
-      f.imgEl.style.top = f.baseTop + 'px';
-      f.imgEl.style.left = '0px';
-    }
-
-    plainViewport.style.height = dispH + 'px';
-    plainImg.style.width = dispW + 'px';
-    plainImg.style.height = dispH + 'px';
-    plainImg.style.top = '0px';
-    plainImg.style.left = '0px';
-  }
-
-  function clampPan(){
-    if (!imgBitmap) return;
-
-    const s = zoom / 100;
-    const dispW = disp.w;
-    const dispH = disp.h;
-    const sliceH = disp.sliceH;
-
-    const minX = dispW - (dispW * s);
-    const maxX = 0;
-
-    let minY;
-    let maxY;
-    if (showFrames){
-      minY = -Infinity;
-      maxY = +Infinity;
-      for (let i=0; i<4; i++){
-        const baseTop = -i * (sliceH + disp.gap);
-        const lo = sliceH - (dispH * s) - baseTop;
-        const hi = -baseTop;
-        minY = Math.max(minY, lo);
-        maxY = Math.min(maxY, hi);
+      function setEnabled(hasImage) {
+        outW.disabled = !hasImage;
+        gapEnabled.disabled = !hasImage;
+        gapInput.disabled = !hasImage || !gapEnabled.checked;
+        btnClear.disabled = !hasImage;
       }
-    } else {
-      minY = dispH - (dispH * s);
-      maxY = 0;
-    }
 
-    if (minY > maxY){
-      minY = Math.min(minY, maxY);
-      maxY = minY;
-    }
-
-    pan.x = clamp(pan.x, minX, maxX);
-    pan.y = clamp(pan.y, minY, maxY);
-  }
-
-  function applyTransform(){
-    if (!imgBitmap) return;
-    const s = zoom / 100;
-    for (const f of frames){
-      f.imgEl.style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${s})`;
-    }
-    plainImg.style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${s})`;
-    drop.style.cursor = (zoom > 100) ? (isPanning ? 'grabbing' : 'grab') : 'default';
-  }
-
-  function updateLeftMode(){
-    if (showFrames){
-      gridWrap.style.position = 'static';
-      gridWrap.style.left = '';
-      gridWrap.style.top = '';
-      gridWrap.style.width = '';
-      gridWrap.style.visibility = 'visible';
-      gridWrap.style.pointerEvents = 'auto';
-      plainViewport.style.display = 'none';
-    } else {
-      gridWrap.style.position = 'absolute';
-      gridWrap.style.left = '0';
-      gridWrap.style.top = '0';
-      gridWrap.style.width = '100%';
-      gridWrap.style.visibility = 'hidden';
-      gridWrap.style.pointerEvents = 'none';
-      plainViewport.style.display = 'block';
-    }
-  }
-
-  function relayout(){
-    if (!imgBitmap) return;
-    layoutDisplay();
-    clampPan();
-    applyTransform();
-    scheduleAutoSplit();
-  }
-
-  gapInput.addEventListener('input', relayout);
-  gapEnabled.addEventListener('change', () => {
-    if (!imgBitmap) return;
-    gapInput.disabled = !gapEnabled.checked;
-    relayout();
-  });
-  outW.addEventListener('input', () => { if (imgBitmap) scheduleAutoSplit(); });
-  frameToggle.addEventListener('change', () => {
-    showFrames = frameToggle.checked;
-    updateLeftMode();
-    clampPan();
-    applyTransform();
-  });
-
-  const ro = new ResizeObserver(() => {
-    if (!imgBitmap) return;
-    layoutDisplay();
-    clampPan();
-    applyTransform();
-  });
-  ro.observe(grid.parentElement);
-
-  function beginPan(e){
-    if (!imgBitmap) return;
-    if (zoom <= 100) return;
-    isPanning = true;
-    drop.setPointerCapture(e.pointerId);
-    panStart.x = e.clientX;
-    panStart.y = e.clientY;
-    panStart.px = pan.x;
-    panStart.py = pan.y;
-    applyTransform();
-  }
-  function movePan(e){
-    if (!isPanning) return;
-    const dx = e.clientX - panStart.x;
-    const dy = e.clientY - panStart.y;
-    pan.x = panStart.px + dx;
-    pan.y = panStart.py + dy;
-    clampPan();
-    applyTransform();
-  }
-  function endPan(){
-    isPanning = false;
-    clampPan();
-    applyTransform();
-    scheduleAutoSplit();
-  }
-
-  drop.addEventListener('pointerdown', beginPan);
-  drop.addEventListener('pointermove', movePan);
-  drop.addEventListener('pointerup', endPan);
-  drop.addEventListener('pointercancel', endPan);
-  drop.addEventListener('wheel', (e) => {
-    if (!imgBitmap) return;
-    e.preventDefault();
-    const dir = e.deltaY > 0 ? -10 : 10;
-    setZoom(zoom + dir);
-  }, { passive: false });
-
-  function downloadBlob(blob, filename){
-    const a = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-  }
-
-  function sanitizeBaseName(name){
-    const cleaned = String(name || 'image').replace(/[\\/:*?"<>|]/g, '_').trim();
-    return cleaned || 'image';
-  }
-
-  function makeOutputName(index){
-    return `${srcBaseName}_${index + 1}.png`;
-  }
-
-  function getVisibleNaturalRect(index){
-    const f = frames[index];
-    if (!f || !imgBitmap || disp.w <= 0 || disp.h <= 0) return null;
-
-    const vpRect = f.viewportEl.getBoundingClientRect();
-    const imgRect = f.imgEl.getBoundingClientRect();
-    const scaleX = imgRect.width / disp.w;
-    const scaleY = imgRect.height / disp.h;
-    if (scaleX <= 0 || scaleY <= 0) return null;
-
-    const dispX = (vpRect.left - imgRect.left) / scaleX;
-    const dispY = (vpRect.top - imgRect.top) / scaleY;
-    const dispRectW = vpRect.width / scaleX;
-    const dispRectH = vpRect.height / scaleY;
-
-    const x0 = clamp(dispX, 0, disp.w);
-    const y0 = clamp(dispY, 0, disp.h);
-    const x1 = clamp(dispX + dispRectW, 0, disp.w);
-    const y1 = clamp(dispY + dispRectH, 0, disp.h);
-
-    const rW = Math.max(1e-6, x1 - x0);
-    const rH = Math.max(1e-6, y1 - y0);
-
-    const scaleToNatural = imgNatural.w / disp.w;
-    return {
-      sx: x0 * scaleToNatural,
-      sy: y0 * scaleToNatural,
-      sw: rW * scaleToNatural,
-      sh: rH * scaleToNatural
-    };
-  }
-
-  async function exportSlice(index){
-    const outWidth  = clamp(parseInt(outW.value || '1920', 10), 64, 8192);
-    const srcRect = getVisibleNaturalRect(index);
-    if (!srcRect) return null;
-
-    const outH = Math.max(1, Math.round(outWidth * (srcRect.sh / srcRect.sw)));
-
-    const c = document.createElement('canvas');
-    c.width  = outWidth;
-    c.height = outH;
-    const ctx = c.getContext('2d', { alpha: true });
-
-    ctx.drawImage(
-      imgBitmap,
-      srcRect.sx, srcRect.sy,
-      srcRect.sw, srcRect.sh,
-      0, 0,
-      outWidth, outH
-    );
-
-    const blob = await new Promise(r => c.toBlob(b => r(b), 'image/png', 1.0));
-    return { blob, w: outWidth, h: outH };
-  }
-
-  function scheduleAutoSplit(){
-    if (!imgBitmap) return;
-    if (splitTimer) clearTimeout(splitTimer);
-    const reqId = ++splitReqId;
-    splitTimer = setTimeout(() => { runAutoSplit(reqId); }, 50);
-  }
-
-  async function runAutoSplit(reqId){
-    if (!imgBitmap || reqId !== splitReqId) return;
-
-    const next = [null, null, null, null];
-    for (let i=0; i<4; i++){
-      const r = await exportSlice(i);
-      if (reqId !== splitReqId){
-        for (let j=0; j<4; j++){
-          if (next[j]?.url) URL.revokeObjectURL(next[j].url);
-        }
-        return;
+      function setAllEnabled(enabled) {
+        btnAll2.disabled = !enabled;
       }
-      if (!r?.blob) continue;
-      const url = URL.createObjectURL(r.blob);
-      next[i] = { ...r, url };
-    }
 
-    for (let i=0;i<4;i++){
-      if (exports[i]?.url) URL.revokeObjectURL(exports[i].url);
-      exports[i] = next[i];
-    }
+      function setZoom(v) {
+        zoom = clamp(v, 50, 300);
+        zoomVal.textContent = String(zoom);
+        clampPan();
+        applyTransform();
+        scheduleAutoSplit();
+      }
 
-    renderThumbUI();
-    setAllEnabled(exports.every(x => !!x));
-  }
+      function reset() {
+        outW.value = '1920';
+        pan.x = 0;
+        pan.y = 0;
+        setZoom(DEFAULT_ZOOM);
+        clampPan();
+        applyTransform();
+        scheduleAutoSplit();
+      }
 
-  function renderThumbUI(){
-    thumbList.innerHTML = '';
+      btnReset.addEventListener('click', reset);
 
-    for (let i=0;i<4;i++){
-      const item = exports[i];
+      zoomMinus.addEventListener('click', () => setZoom(zoom - 10));
+      zoomPlus.addEventListener('click', () => setZoom(zoom + 10));
 
-      const row = document.createElement('div');
-      row.className = 'thumbRow';
-
-      const img = document.createElement('img');
-      img.className = 'thumb';
-      img.alt = `${i+1}枚目プレビュー`;
-      img.src = item?.url || '';
-      row.appendChild(img);
-
-      const info = document.createElement('div');
-      const t = document.createElement('div');
-      t.className = 'thumbTitle';
-      t.textContent = `${i+1}枚目`;
-      const m = document.createElement('div');
-      m.className = 'thumbMeta';
-      m.textContent = item ? `${item.w} × ${item.h} (PNG)` : '未生成';
-      info.appendChild(t);
-      info.appendChild(m);
-      row.appendChild(info);
-
-      const btn = document.createElement('button');
-      btn.className = 'dlIcon';
-      btn.textContent = '⬇';
-      btn.disabled = !item;
-      btn.addEventListener('click', () => {
-        if (!exports[i]) return;
-        downloadBlob(exports[i].blob, makeOutputName(i));
+      drop.addEventListener('click', (e) => {
+        const t = e.target;
+        if (t && t.closest && t.closest('a,button,input,label')) return;
+        if (!imgBitmap) fileInput.click();
       });
-      row.appendChild(btn);
 
-      thumbList.appendChild(row);
-    }
-  }
+      drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('dragover'); });
+      drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+      drop.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        drop.classList.remove('dragover');
+        if (imgBitmap) return;
+        const f = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) await loadFile(f);
+      });
 
-  btnAll2.addEventListener('click', async () => {
-    if (exports.some(x => !x)) return;
-    for (let i=0;i<4;i++){
-      downloadBlob(exports[i].blob, makeOutputName(i));
-      await new Promise(r => setTimeout(r, 120));
-    }
-  });
+      fileInput.addEventListener('change', async () => {
+        const f = fileInput.files && fileInput.files[0];
+        fileInput.value = '';
+        if (f) await loadFile(f);
+      });
 
-  setEnabled(false);
-  setAllEnabled(false);
-  setZoom(DEFAULT_ZOOM);
+      async function loadFile(file) {
+        if (!file.type.startsWith('image/')) return;
 
-})();
-</script>
+        if (splitTimer) clearTimeout(splitTimer);
+        splitReqId++;
+
+        if (imgObjUrl) URL.revokeObjectURL(imgObjUrl);
+        if (imgBitmap && imgBitmap.close) imgBitmap.close();
+        clearExports();
+
+        imgObjUrl = URL.createObjectURL(file);
+
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = imgObjUrl;
+        await img.decode();
+
+        imgNatural.w = img.naturalWidth;
+        imgNatural.h = img.naturalHeight;
+        srcBaseName = sanitizeBaseName((file.name || 'image').replace(/\.[^.]+$/, ''));
+        imgBitmap = await createImageBitmap(img);
+
+        buildFrames();
+        plainImg.src = imgObjUrl;
+
+        placeholder.style.display = 'none';
+        previewArea.style.display = 'block';
+        setEnabled(true);
+
+        pan.x = 0; pan.y = 0;
+        setZoom(DEFAULT_ZOOM);
+        layoutDisplay();
+        updateLeftMode();
+        clampPan();
+        applyTransform();
+      }
+
+      function clearImage() {
+        if (splitTimer) clearTimeout(splitTimer);
+        splitReqId++;
+        clearExports();
+
+        if (imgBitmap && imgBitmap.close) imgBitmap.close();
+        imgBitmap = null;
+        imgNatural.w = 0;
+        imgNatural.h = 0;
+
+        if (imgObjUrl) URL.revokeObjectURL(imgObjUrl);
+        imgObjUrl = null;
+        plainImg.src = '';
+
+        grid.innerHTML = '';
+        frames.length = 0;
+
+        pan.x = 0;
+        pan.y = 0;
+        setZoom(DEFAULT_ZOOM);
+        showFrames = true;
+        frameToggle.checked = true;
+        updateLeftMode();
+
+        fileInput.value = '';
+        placeholder.style.display = 'flex';
+        previewArea.style.display = 'none';
+        setEnabled(false);
+        setAllEnabled(false);
+      }
+
+      btnClear.addEventListener('click', clearImage);
+
+      function clearExports() {
+        for (let i = 0; i < 4; i++) {
+          if (exports[i]?.url) URL.revokeObjectURL(exports[i].url);
+          exports[i] = null;
+        }
+        thumbList.innerHTML = '';
+        setAllEnabled(false);
+      }
+
+      function buildFrames() {
+        grid.innerHTML = '';
+        frames.length = 0;
+
+        for (let i = 0; i < 4; i++) {
+          const frameEl = document.createElement('div');
+          frameEl.className = 'frame';
+
+          const label = document.createElement('div');
+          label.className = 'label';
+          label.textContent = `${i + 1}枚目`;
+          frameEl.appendChild(label);
+
+          const viewportEl = document.createElement('div');
+          viewportEl.className = 'viewport';
+
+          const imgEl = document.createElement('img');
+          imgEl.className = 'imgLayer';
+          imgEl.alt = '';
+          imgEl.src = imgObjUrl;
+
+          viewportEl.appendChild(imgEl);
+          frameEl.appendChild(viewportEl);
+          grid.appendChild(frameEl);
+
+          frames.push({ frameEl, viewportEl, imgEl, idx: i, baseTop: 0 });
+        }
+      }
+
+      function layoutDisplay() {
+        if (!imgBitmap) return;
+
+        const wrap = gridWrap;
+        const availW = (wrap?.clientWidth || 1);
+        const dispW = Math.min(1920, availW);
+        const dispH = Math.max(1, Math.round(dispW * (imgNatural.h / imgNatural.w)));
+
+        const gapPx = gapEnabled.checked ? clamp(parseInt(gapInput.value || '0', 10), 0, 400) : 0;
+        const usableH = Math.max(1, dispH - gapPx * 3);
+        const sliceH = Math.max(1, Math.floor(usableH / 4));
+
+        disp.w = dispW;
+        disp.h = dispH;
+        disp.sliceH = sliceH;
+        disp.gap = gapPx;
+
+        grid.style.gap = gapPx + 'px';
+
+        for (const f of frames) {
+          f.viewportEl.style.height = sliceH + 'px';
+          f.imgEl.style.width = dispW + 'px';
+          f.imgEl.style.height = dispH + 'px';
+
+          f.baseTop = -f.idx * (sliceH + gapPx);
+          f.imgEl.style.top = f.baseTop + 'px';
+          f.imgEl.style.left = '0px';
+        }
+
+        plainViewport.style.height = dispH + 'px';
+        plainImg.style.width = dispW + 'px';
+        plainImg.style.height = dispH + 'px';
+        plainImg.style.top = '0px';
+        plainImg.style.left = '0px';
+      }
+
+      function clampPan() {
+        if (!imgBitmap) return;
+
+        const s = zoom / 100;
+        const dispW = disp.w;
+        const dispH = disp.h;
+        const sliceH = disp.sliceH;
+
+        const minX = dispW - (dispW * s);
+        const maxX = 0;
+
+        let minY;
+        let maxY;
+        if (showFrames) {
+          minY = -Infinity;
+          maxY = +Infinity;
+          for (let i = 0; i < 4; i++) {
+            const baseTop = -i * (sliceH + disp.gap);
+            const lo = sliceH - (dispH * s) - baseTop;
+            const hi = -baseTop;
+            minY = Math.max(minY, lo);
+            maxY = Math.min(maxY, hi);
+          }
+        } else {
+          minY = dispH - (dispH * s);
+          maxY = 0;
+        }
+
+        if (minY > maxY) {
+          minY = Math.min(minY, maxY);
+          maxY = minY;
+        }
+
+        pan.x = clamp(pan.x, minX, maxX);
+        pan.y = clamp(pan.y, minY, maxY);
+      }
+
+      function applyTransform() {
+        if (!imgBitmap) return;
+        const s = zoom / 100;
+        for (const f of frames) {
+          f.imgEl.style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${s})`;
+        }
+        plainImg.style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${s})`;
+        drop.style.cursor = (zoom > 100) ? (isPanning ? 'grabbing' : 'grab') : 'default';
+      }
+
+      function updateLeftMode() {
+        if (showFrames) {
+          gridWrap.style.position = 'static';
+          gridWrap.style.left = '';
+          gridWrap.style.top = '';
+          gridWrap.style.width = '';
+          gridWrap.style.visibility = 'visible';
+          gridWrap.style.pointerEvents = 'auto';
+          plainViewport.style.display = 'none';
+        } else {
+          gridWrap.style.position = 'absolute';
+          gridWrap.style.left = '0';
+          gridWrap.style.top = '0';
+          gridWrap.style.width = '100%';
+          gridWrap.style.visibility = 'hidden';
+          gridWrap.style.pointerEvents = 'none';
+          plainViewport.style.display = 'block';
+        }
+      }
+
+      function relayout() {
+        if (!imgBitmap) return;
+        layoutDisplay();
+        clampPan();
+        applyTransform();
+        scheduleAutoSplit();
+      }
+
+      gapInput.addEventListener('input', relayout);
+      gapEnabled.addEventListener('change', () => {
+        if (!imgBitmap) return;
+        gapInput.disabled = !gapEnabled.checked;
+        relayout();
+      });
+      outW.addEventListener('input', () => { if (imgBitmap) scheduleAutoSplit(); });
+      frameToggle.addEventListener('change', () => {
+        showFrames = frameToggle.checked;
+        updateLeftMode();
+        clampPan();
+        applyTransform();
+      });
+
+      const ro = new ResizeObserver(() => {
+        if (!imgBitmap) return;
+        layoutDisplay();
+        clampPan();
+        applyTransform();
+      });
+      ro.observe(grid.parentElement);
+
+      function beginPan(e) {
+        if (!imgBitmap) return;
+        if (zoom <= 100) return;
+        isPanning = true;
+        drop.setPointerCapture(e.pointerId);
+        panStart.x = e.clientX;
+        panStart.y = e.clientY;
+        panStart.px = pan.x;
+        panStart.py = pan.y;
+        applyTransform();
+      }
+      function movePan(e) {
+        if (!isPanning) return;
+        const dx = e.clientX - panStart.x;
+        const dy = e.clientY - panStart.y;
+        pan.x = panStart.px + dx;
+        pan.y = panStart.py + dy;
+        clampPan();
+        applyTransform();
+      }
+      function endPan() {
+        isPanning = false;
+        clampPan();
+        applyTransform();
+        scheduleAutoSplit();
+      }
+
+      drop.addEventListener('pointerdown', beginPan);
+      drop.addEventListener('pointermove', movePan);
+      drop.addEventListener('pointerup', endPan);
+      drop.addEventListener('pointercancel', endPan);
+      drop.addEventListener('wheel', (e) => {
+        if (!imgBitmap) return;
+        e.preventDefault();
+        const dir = e.deltaY > 0 ? -10 : 10;
+        setZoom(zoom + dir);
+      }, { passive: false });
+
+      function downloadBlob(blob, filename) {
+        const a = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+      }
+
+      function sanitizeBaseName(name) {
+        const cleaned = String(name || 'image').replace(/[\\/:*?"<>|]/g, '_').trim();
+        return cleaned || 'image';
+      }
+
+      function makeOutputName(index) {
+        return `${srcBaseName}_${index + 1}.png`;
+      }
+
+      function getVisibleNaturalRect(index) {
+        const f = frames[index];
+        if (!f || !imgBitmap || disp.w <= 0 || disp.h <= 0) return null;
+
+        const vpRect = f.viewportEl.getBoundingClientRect();
+        const imgRect = f.imgEl.getBoundingClientRect();
+        const scaleX = imgRect.width / disp.w;
+        const scaleY = imgRect.height / disp.h;
+        if (scaleX <= 0 || scaleY <= 0) return null;
+
+        const dispX = (vpRect.left - imgRect.left) / scaleX;
+        const dispY = (vpRect.top - imgRect.top) / scaleY;
+        const dispRectW = vpRect.width / scaleX;
+        const dispRectH = vpRect.height / scaleY;
+
+        const x0 = clamp(dispX, 0, disp.w);
+        const y0 = clamp(dispY, 0, disp.h);
+        const x1 = clamp(dispX + dispRectW, 0, disp.w);
+        const y1 = clamp(dispY + dispRectH, 0, disp.h);
+
+        const rW = Math.max(1e-6, x1 - x0);
+        const rH = Math.max(1e-6, y1 - y0);
+
+        const scaleToNatural = imgNatural.w / disp.w;
+        return {
+          sx: x0 * scaleToNatural,
+          sy: y0 * scaleToNatural,
+          sw: rW * scaleToNatural,
+          sh: rH * scaleToNatural
+        };
+      }
+
+      async function exportSlice(index) {
+        const outWidth = clamp(parseInt(outW.value || '1920', 10), 64, 8192);
+        const srcRect = getVisibleNaturalRect(index);
+        if (!srcRect) return null;
+
+        const outH = Math.max(1, Math.round(outWidth * (srcRect.sh / srcRect.sw)));
+
+        const c = document.createElement('canvas');
+        c.width = outWidth;
+        c.height = outH;
+        const ctx = c.getContext('2d', { alpha: true });
+
+        ctx.drawImage(
+          imgBitmap,
+          srcRect.sx, srcRect.sy,
+          srcRect.sw, srcRect.sh,
+          0, 0,
+          outWidth, outH
+        );
+
+        const blob = await new Promise(r => c.toBlob(b => r(b), 'image/png', 1.0));
+        return { blob, w: outWidth, h: outH };
+      }
+
+      function scheduleAutoSplit() {
+        if (!imgBitmap) return;
+        if (splitTimer) clearTimeout(splitTimer);
+        const reqId = ++splitReqId;
+        splitTimer = setTimeout(() => { runAutoSplit(reqId); }, 50);
+      }
+
+      async function runAutoSplit(reqId) {
+        if (!imgBitmap || reqId !== splitReqId) return;
+
+        const next = [null, null, null, null];
+        for (let i = 0; i < 4; i++) {
+          const r = await exportSlice(i);
+          if (reqId !== splitReqId) {
+            for (let j = 0; j < 4; j++) {
+              if (next[j]?.url) URL.revokeObjectURL(next[j].url);
+            }
+            return;
+          }
+          if (!r?.blob) continue;
+          const url = URL.createObjectURL(r.blob);
+          next[i] = { ...r, url };
+        }
+
+        for (let i = 0; i < 4; i++) {
+          if (exports[i]?.url) URL.revokeObjectURL(exports[i].url);
+          exports[i] = next[i];
+        }
+
+        renderThumbUI();
+        setAllEnabled(exports.every(x => !!x));
+      }
+
+      function renderThumbUI() {
+        thumbList.innerHTML = '';
+
+        for (let i = 0; i < 4; i++) {
+          const item = exports[i];
+
+          const row = document.createElement('div');
+          row.className = 'thumbRow';
+
+          const img = document.createElement('img');
+          img.className = 'thumb';
+          img.alt = `${i + 1}枚目プレビュー`;
+          img.src = item?.url || '';
+          row.appendChild(img);
+
+          const info = document.createElement('div');
+          const t = document.createElement('div');
+          t.className = 'thumbTitle';
+          t.textContent = `${i + 1}枚目`;
+          const m = document.createElement('div');
+          m.className = 'thumbMeta';
+          m.textContent = item ? `${item.w} × ${item.h} (PNG)` : '未生成';
+          info.appendChild(t);
+          info.appendChild(m);
+          row.appendChild(info);
+
+          const btn = document.createElement('button');
+          btn.className = 'dlIcon';
+          btn.textContent = '⬇';
+          btn.disabled = !item;
+          btn.addEventListener('click', () => {
+            if (!exports[i]) return;
+            downloadBlob(exports[i].blob, makeOutputName(i));
+          });
+          row.appendChild(btn);
+
+          thumbList.appendChild(row);
+        }
+      }
+
+      btnAll2.addEventListener('click', async () => {
+        if (exports.some(x => !x)) return;
+        for (let i = 0; i < 4; i++) {
+          downloadBlob(exports[i].blob, makeOutputName(i));
+          await new Promise(r => setTimeout(r, 120));
+        }
+      });
+
+      setEnabled(false);
+      setAllEnabled(false);
+      setZoom(DEFAULT_ZOOM);
+
+    })();
+  </script>
 </body>
-</html>
 
+</html>
