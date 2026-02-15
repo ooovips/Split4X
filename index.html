@@ -224,6 +224,34 @@
       text-align:left;
       display:inline-block;
     }
+    .placeholder .helpLink{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top: 6px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(29,78,216,.28);
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(29,78,216,.12);
+      font-weight:900;
+      color:#1e3a8a;
+      text-decoration:none;
+    }
+    .placeholder .helpLink::before{
+      content:"？";
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      border:2px solid rgba(29,78,216,.40);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      line-height:1;
+      color:#1d4ed8;
+      background:rgba(219,234,254,.65);
+    }
 
     .previewArea{ display:none; position:relative; }
 
@@ -422,6 +450,8 @@
               or<br/>ファイルをドラッグ
               <br/><br/><br/>
               <div class="important">4分割画像を投稿するためには以下の条件が必要です。<br/><br/>・X Premium に加入<br/>・PC (Windows / macOS) のウェブブラウザから投稿<br/>・テキストが必須<br/><br/>※ iPhone や Android 端末からは投稿できません。</div>
+              <br/><br/><br/>
+              <a class="helpLink" href="./help.html">詳しい使い方はこちら</a>
             </div>
           </div>
 
@@ -440,7 +470,7 @@
 
     <div class="panel">
       <div class="side">
-        <h3>ダウンロード</h3>
+        <h3>分割後画像</h3>
 
         <div class="sideCard">
           <div class="rowBtns">
@@ -543,7 +573,11 @@
   zoomMinus.addEventListener('click', () => setZoom(zoom - 10));
   zoomPlus.addEventListener('click', () => setZoom(zoom + 10));
 
-  drop.addEventListener('click', () => { if (!imgBitmap) fileInput.click(); });
+  drop.addEventListener('click', (e) => {
+    const t = e.target;
+    if (t && t.closest && t.closest('a,button,input,label')) return;
+    if (!imgBitmap) fileInput.click();
+  });
 
   drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('dragover'); });
   drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
