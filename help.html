@@ -13,9 +13,6 @@
       --muted:#6b7280;
       --shadow: 0 12px 30px rgba(31,41,55,.10);
       --radius: 18px;
-      --line: rgba(31,41,55,.10);
-      --accent1: rgba(236,72,153,.20);
-      --accent2: rgba(124,58,237,.20);
       --accentBorder: rgba(124,58,237,.30);
       --warn:#b91c1c;
     }
@@ -63,11 +60,10 @@
 
     .btn{
       text-decoration:none;
-      border:none;
-      border-radius: 14px;
-      padding: 10px 14px;
+      border-radius:14px;
+      padding:10px 14px;
       background:#fff;
-      border: 2px solid var(--accentBorder);
+      border:2px solid var(--accentBorder);
       color:#111827;
       font-weight:900;
       white-space:nowrap;
@@ -91,17 +87,38 @@
       line-height:1.65;
     }
 
+    .sectionTitle{
+      font-size:18px;
+      font-weight:900;
+      padding:10px 14px;
+      border-radius:12px;
+      background:linear-gradient(90deg, rgba(43,108,176,.14), rgba(236,72,153,.14));
+      border:1px solid rgba(31,41,55,.10);
+    }
+
+    .conditionRow{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:14px;
+      align-items:start;
+    }
+
     .videoGrid{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:14px;
     }
-    @media (max-width: 980px){
-      .videoGrid{ grid-template-columns:1fr; }
-    }
     .videoBox h3{
       margin:0 0 8px;
       font-size:14px;
+    }
+    .videoBox.main{
+      max-width:75%;
+      margin:0 auto;
+    }
+    .videoWrap{
+      position:relative;
+      cursor:pointer;
     }
     video{
       width:100%;
@@ -110,14 +127,34 @@
       background:#000;
       display:block;
     }
-    .dialogShot{
-      width:100%;
-      max-width:360px;
-      border-radius:12px;
-      border:1px solid rgba(31,41,55,.10);
-      margin-top:10px;
-      display:block;
+    .playBadge{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%, -50%);
+      width:68px;
+      height:68px;
+      border-radius:999px;
+      border:3px solid rgba(255,255,255,.92);
+      background:rgba(0,0,0,.34);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:auto;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+      transition:opacity .15s ease;
     }
+    .playBadge::before{
+      content:"";
+      margin-left:4px;
+      width:0;
+      height:0;
+      border-left:18px solid #fff;
+      border-top:12px solid transparent;
+      border-bottom:12px solid transparent;
+    }
+    .videoWrap.playing .playBadge{ opacity:0; }
 
     .warn{
       color:var(--warn);
@@ -125,10 +162,21 @@
       line-height:1.7;
       white-space:pre-line;
     }
+    .dialogNote{
+      color:#374151;
+      line-height:1.7;
+      margin-bottom:8px;
+    }
+    .dialogShot{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(31,41,55,.10);
+      display:block;
+    }
 
     .list{
       margin:0;
-      padding-left: 1.2em;
+      padding-left:1.2em;
       line-height:1.7;
       color:#374151;
     }
@@ -139,6 +187,12 @@
       font-size:12px;
       color:#6b7280;
     }
+
+    @media (max-width: 980px){
+      .conditionRow{ grid-template-columns:1fr; }
+      .videoGrid{ grid-template-columns:1fr; }
+      .videoBox.main{ max-width:100%; }
+    }
   </style>
 </head>
 <body>
@@ -146,7 +200,7 @@
     <div class="panel">
       <div class="header">
         <div class="title">Split4X - ヘルプ</div>
-        <a class="btn" href="./index.html">ツールへ戻る</a>
+        <a class="btn" href="./index.html">ツールに戻る</a>
       </div>
 
       <div class="content">
@@ -155,22 +209,34 @@
           <p>Split4X の使い方、4分割投稿の方法、画面構成と操作方法をまとめています。</p>
         </div>
 
-        <div class="videoGrid">
-          <div class="card videoBox">
-            <h3>使い方動画</h3>
+        <div class="card conditionRow">
+          <div>
+            <h2>4分割画像の条件</h2>
+            <div class="warn">4分割画像を投稿するためには以下の条件が必要です。
+
+・X Premium に加入
+・PC (Windows / macOS) のウェブブラウザから投稿
+・テキストが必須
+
+※ iPhone や Android 端末からは投稿できません。</div>
+          </div>
+          <div>
+            <h2>確認ダイアログ</h2>
+            <p class="dialogNote">ダウンロード時にブラウザで確認ダイアログ（下図）が表示された場合は、<strong>「許可」</strong> を押してください。</p>
+            <img class="dialogShot" src="./HelpResources/Dialog.png" alt="許可ダイアログの例" />
+          </div>
+        </div>
+
+        <div class="sectionTitle">使い方</div>
+        <div class="card videoBox main">
+          <h3>使い方動画</h3>
+          <div class="videoWrap">
             <video controls preload="metadata">
               <source src="./HelpResources/usage1.mp4" type="video/mp4" />
             </video>
-            <p>画像読み込み、ズーム・ドラッグ、Gap 設定、ダウンロードまでの基本手順です。</p>
+            <div class="playBadge" aria-hidden="true"></div>
           </div>
-
-          <div class="card videoBox">
-            <h3>4分割投稿動画（テキストの下に画像を貼る場合）</h3>
-            <video controls preload="metadata">
-              <source src="./HelpResources/usage2.mp4" type="video/mp4" />
-            </video>
-            <p>生成した4枚画像を X へ投稿する流れを説明しています。</p>
-          </div>
+          <p>画像読み込み、ズーム・ドラッグ、Gap 設定、ダウンロードまでの基本手順です。</p>
         </div>
 
         <div class="card">
@@ -187,25 +253,37 @@
           </ul>
         </div>
 
+        <div class="sectionTitle">X で画像を貼る方法</div>
+        <div class="videoGrid">
+          <div class="card videoBox">
+            <h3>4分割投稿動画（テキストの下に画像を貼る場合 / Gap = 90px）</h3>
+            <div class="videoWrap">
+              <video controls preload="metadata">
+                <source src="./HelpResources/usage2.mp4" type="video/mp4" />
+              </video>
+              <div class="playBadge" aria-hidden="true"></div>
+            </div>
+            <p>生成した4枚画像を X へ投稿する流れを説明しています。</p>
+          </div>
+
+          <div class="card videoBox">
+            <h3>4分割投稿動画（テキストの上に画像を貼る場合 / Gap = 12px）</h3>
+            <div class="videoWrap">
+              <video controls preload="metadata">
+                <source src="./HelpResources/usage3.mp4" type="video/mp4" />
+              </video>
+              <div class="playBadge" aria-hidden="true"></div>
+            </div>
+            <p>テキストの上に画像を貼る投稿手順を説明しています。</p>
+          </div>
+        </div>
+
         <div class="card">
-          <h2>Gap 値の推奨値</h2>
+          <h2>Gap の推奨値</h2>
           <ul class="list">
             <li>テキストの下に画像を並べる場合: 90px</li>
             <li>テキストの上に画像を並べる場合: 12px</li>
           </ul>
-        </div>
-
-        <div class="card">
-          <h2>使用できないケース / 注意事項</h2>
-          <div class="warn">4分割画像を投稿するためには以下の条件が必要です。
-
-・X Premium に加入
-・PC (Windows / macOS) のウェブブラウザから投稿
-・テキストが必須
-
-※ iPhone や Android 端末からは投稿できません。</div>
-          <p style="margin-top:10px; color:#374151; line-height:1.7;">ブラウザで確認ダイアログ（下図）が表示された場合は、<strong>「許可」</strong> を押してください。</p>
-          <img class="dialogShot" src="./HelpResources/Dialog.png" alt="許可ダイアログの例" />
         </div>
       </div>
     </div>
@@ -215,5 +293,35 @@
     GitHub:
     <a href="https://github.com/ooovips/Split4X" target="_blank" rel="noopener noreferrer">https://github.com/ooovips/Split4X</a>
   </div>
+  <script>
+    (() => {
+      const wraps = document.querySelectorAll('.videoWrap');
+      for (const wrap of wraps){
+        const video = wrap.querySelector('video');
+        if (!video) continue;
+
+        const sync = () => {
+          wrap.classList.toggle('playing', !video.paused && !video.ended);
+        };
+
+        const start = (e) => {
+          if (e) e.preventDefault();
+          video.play().catch(() => {});
+        };
+
+        const badge = wrap.querySelector('.playBadge');
+        if (badge){
+          badge.addEventListener('click', start);
+          badge.addEventListener('pointerdown', start);
+        }
+        video.addEventListener('click', start);
+
+        video.addEventListener('play', sync);
+        video.addEventListener('pause', sync);
+        video.addEventListener('ended', sync);
+        sync();
+      }
+    })();
+  </script>
 </body>
 </html>
